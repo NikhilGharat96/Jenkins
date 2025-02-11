@@ -1,2 +1,46 @@
 ***** jenkins installation on ubuntu *****
 
+
+# Update package list and install dependencies .................
+sudo apt update
+sudo apt install -y openjdk-11-jdk wget gnupg2
+
+# Add Jenkins GPG key and repository ............................
+wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+# Update package list and install Jenkins .........................
+sudo apt update
+sudo apt install -y jenkins
+
+# Start and enable Jenkins service ................................
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+# Display Jenkins initial admin password .........................
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+# Add port 8080 in SG for Jenkins.
+You can access Jenkins at http://<your-server public-ip>:8080
+
+----------------------------------------------------------------
+
+# when you are in jenkins dashboard and you see your node is offline 
+  means tmp file storage is low.                                                         ...... if you are use t2.micro instance type.
+
+- df -h command shows your file storage.
+#To increse tmp storage run these commands:
+
+sudo mount -o remount,size=2G /tmp   ..... add one line in fstab,so that when we stop our ec2 ,tmp storage not change.
+sudo nano /etc/fstab        ...... your file is open, then add following line in that file in last. and save it.
+tmpfs /tmp tmpfs defaults,size=2G,noatime,nosuid 0 0   ....... save and restart jenkins.
+sudo systemctl jenkins restart
+
+      .........and later login in jenkins this node not show offline.
+
+
+
+
+
+...............................................................
+
