@@ -1,2 +1,39 @@
-***** Jenkins installation on ubuntu *****
+***** Jenkins installation on Amazon-linux *****                                                                                                      
+                                                                                                                                                        
+# Executes these all commands on your ec2-instance.                                                                                                     
+                                                                                                                                                        
+sudo wget -O /etc/yum.repos.d/jenkins.repo  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade
+sudo dnf install java-17-amazon-corretto -y
+sudo yum install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
 
+----------------------------------------------------------------
+# Add ports
+
+- Add port 8080    .......jenkins default port no.
+- to access jenkins copy your ec2 public-ip and paste in browser with 8080.  ............ eg. 165.76.34.2:8080
+
+----------------------------------------------------------------
+
+# when you are in jenkins dashboard and you see your node is offline 
+  means tmp file storage is low.                                                         ...... if you are use t2.micro instance type.
+
+- df -h command shows your file storage.
+#To increse tmp storage run these commands:
+
+sudo mount -o remount,size=2G /tmp   ..... add one line in fstab,so that when we stop our ec2 ,tmp storage not change.
+sudo nano /etc/fstab        ...... your file is open, then add following line in that file in last. and save it.
+tmpfs /tmp tmpfs defaults,size=2G,noatime,nosuid 0 0   ....... save and restart jenkins.
+sudo systemctl jenkins restart
+
+      .........and later login in jenkins this node not show offline.
+
+
+
+
+
+...............................................................
